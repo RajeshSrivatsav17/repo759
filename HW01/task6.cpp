@@ -10,9 +10,9 @@ int main(int argc, char *argv[]){
     
     int num = std::stoi(argv[1]);
     for(int i=0;i<=num;i++){
-        std::cout<<i<<" ";
+        printf("%d ", i);
     }
-    std::cout<<"\n";
+    printf("\n");
     for(int i=num;i>=0;i--){
         std::cout<<i<<" ";
     }
