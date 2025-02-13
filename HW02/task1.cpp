@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string> 
-#include "scan.cpp"
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+#include "scan.h"
+using std::chrono::high_resolution_clock;
+using std::chrono::duration;
 
 int main(int argc, char *argv[]){
     if(argc == 1)
@@ -19,6 +24,6 @@ int main(int argc, char *argv[]){
     scan(arr,arr,n);
     end_time = high_resolution_clock::now();
     total_time = std::chrono::duration_cast< duration<double, std::milli> >(end_time - start_time);
-    std::cout << total_time.count() << "\n" << arr[0] << "\n" << arr[n-1];
+    std::cout << total_time.count() << "\n" << arr[0] << "\n" << arr[n-1]<<"\n";
     delete[] arr;
 }
