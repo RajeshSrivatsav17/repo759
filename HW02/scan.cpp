@@ -14,7 +14,8 @@ void genRandomFloat(float * arr, std::size_t size, float min, float max){
 }
 
 void scan(const float *arr, float *output, std::size_t n){
+    output[0] = arr[0];
     for(long unsigned int i=1;i<n;i++){
-        output[i] = arr[i]+arr[i-1];
+        output[i] = arr[i]+output[i-1];
     }
 }
