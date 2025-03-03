@@ -21,7 +21,7 @@ void genRandomFloat(float * arr, std::size_t size, float min, float max){
 int main(int argc, char *argv[]){
     if(argc < 3)
     {
-        cout <<"Please provide n and t arguments\n";
+        std::cout <<"Please provide n and t arguments\n";
         return 0;
     }
 
@@ -37,16 +37,16 @@ int main(int argc, char *argv[]){
     float * g = new float[n*n];
 
     genRandomFloat(f, n*n, -10, 10);
-    genRandomFloat(w, m*m, -1 , 1);
+    genRandomFloat(w, 3*3, -1 , 1);
 
     for(size_t i=0;i<n*n;i++){
         g[i] = 0;
     }
     omp_set_num_threads(t);
-    cout<<"Number of OMP threads" << omp_get_num_threads() << "\n";
+    std::cout<<"Number of OMP threads" << omp_get_num_threads() << "\n";
 
     start_time = high_resolution_clock::now();
-    convolve(f, g, n, w, m);
+    convolve(f, g, n, w, 3);
     end_time = high_resolution_clock::now();
     total_time = std::chrono::duration_cast< duration<float, std::milli> >(end_time - start_time);
     std::cout << g[0] << "\n" << g[n*n-1] << "\n" << total_time.count() << "\n" ;
