@@ -43,7 +43,6 @@ int main(int argc, char *argv[]){
         g[i] = 0;
     }
     omp_set_num_threads(t);
-    std::cout<<"Number of OMP threads" << omp_get_num_threads() << "\n";
 
     start_time = high_resolution_clock::now();
     convolve(f, g, n, w, 3);

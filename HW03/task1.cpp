@@ -13,11 +13,6 @@ float genRandomfloat(float min, float max){
     return (min + (((float)std::rand())/(float)RAND_MAX)*(max-min));
 }
 
-int genRandomInt(int min, int max){
-    std::srand(std::time(0));
-    return (min + (std::rand() % (max-min+1)));
-}
-
 void assignRandomNumberToInputArrays(float * arr, std::size_t n){
     float random_num = 0.0;
     for(long unsigned int i =0;i<n;i++){
@@ -53,6 +48,7 @@ int main(int argc, char* argv[]) {
         C[i] = 0.0;
     }
     omp_set_num_threads(t);
+
     start_time = high_resolution_clock::now();
     mmul(A, B, C, n);
     end_time = high_resolution_clock::now();

@@ -34,9 +34,9 @@ int main(int argc, char* argv[]) {
     }
     size_t n = std::atoi(argv[1]);
     size_t t = std::atoi(argv[2]);
-    size_t threshold = std::atoi(argv[2]);
+    size_t threshold = std::atoi(argv[3]);
     std::srand(std::time(0));
-    std::cout<< n << " " << t << " " << threshold << "\n";
+
     omp_set_num_threads(t);
     
     high_resolution_clock::time_point start_time;
@@ -49,10 +49,7 @@ int main(int argc, char* argv[]) {
     start_time = high_resolution_clock::now();
     msort(arr, n, threshold);
     end_time = high_resolution_clock::now();
-    // for(int i =0; i<n;i++){
-    //     std::cout << arr[i] << "\n";
-    // }
-    // std::cout << "\n";
+
     total_time = std::chrono::duration_cast< duration<double, std::milli> >(end_time - start_time);
     std::cout << arr[0] << "\n" << arr[n-1] << "\n" <<total_time.count() << "\n";
 

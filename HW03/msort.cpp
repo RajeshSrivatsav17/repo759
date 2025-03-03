@@ -55,16 +55,18 @@ void mergesort(int* arr, int left, int right, int threshold) {
     int mid = left + (right - left) / 2;
     #pragma omp parallel
     {
-        #pragma omp single  // Ensure only one thread spawns tasks
+        #pragma omp single nowait // Ensure only one thread spawns tasks
         {
-            #pragma omp task
+            #pragma omp task 
             mergesort(arr, left, mid, threshold);
 
-            #pragma omp task
+            #pragma omp task 
             mergesort(arr, mid + 1, right, threshold);
+
         }
     }
     merge(arr, left, mid, right);
+
 }
 
 void msort(int* arr, const std::size_t n, const std::size_t threshold){
