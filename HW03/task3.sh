@@ -11,4 +11,5 @@ t=$((2**3))
 n=$((10**6))
 ts=$((2**$SLURM_ARRAY_TASK_ID))
 echo "./task3 $SLURM_ARRAY_TASK_ID"
-./task3 $n $t $ts
+g++ task3.cpp msort.cpp -Wall -O3 -std=c++17 -o task3_$SLURM_ARRAY_TASK_ID -fopenmp
+./task3_$SLURM_ARRAY_TASK_ID $n $t $ts

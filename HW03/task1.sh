@@ -10,4 +10,5 @@
 t=$(($SLURM_ARRAY_TASK_ID))
 n=$((2**10))
 echo "./task1 $SLURM_ARRAY_TASK_ID"
-./task1 $n $t
+g++ task1.cpp matmul.cpp -Wall -O3 -std=c++17 -o task1_$SLURM_ARRAY_TASK_ID -fopenmp
+./task1_$SLURM_ARRAY_TASK_ID $n $t
