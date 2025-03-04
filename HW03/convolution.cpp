@@ -5,7 +5,6 @@
 #include <cstddef>
 #include <vector>
 #include <omp.h>
-
 void convolve(const float *image, float *output, std::size_t n, const float *mask, std::size_t m){
     #pragma omp parallel for
     for(size_t x=0;x<n;x++){

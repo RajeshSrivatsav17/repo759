@@ -35,7 +35,6 @@ int main(int argc, char *argv[]){
     float * f = new float[n*n];
     float * w = new float[3*3];
     float * g = new float[n*n];
-
     genRandomFloat(f, n*n, -10, 10);
     genRandomFloat(w, 3*3, -1 , 1);
 
