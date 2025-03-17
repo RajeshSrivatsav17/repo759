@@ -9,5 +9,5 @@
 # Compute n for this specific task
 t=$(($SLURM_ARRAY_TASK_ID))
 echo "./task3 $SLURM_ARRAY_TASK_ID"
-g++ task3.cpp -Wall -O3 -std=c++17 -o task3 -fopenmp
-./task3 100 5 $t
+g++ task3.cpp -Wall -O3 -std=c++17 -o task3_$SLURM_ARRAY_TASK_ID -fopenmp
+./task3_$SLURM_ARRAY_TASK_ID 100 5 $t
