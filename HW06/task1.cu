@@ -1,6 +1,9 @@
 #include<iostream>
 #include<cuda.h>
 #include<cmath>
+#include<ctime>
+#include "matmul.cuh"
+
 
 float genRandomfloat(float min, float max){
     return (min + (((float)std::rand())/(float)RAND_MAX)*(max-min));
@@ -50,12 +53,12 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(Bd, B, size* sizeof(float), cudaMemcpyHostToDevice);
 
     int block_dim = sqrt(threads_per_block);
-
+    int shared_memory = 2*block_dim*block_dim*sizeof(float);
     dim3 dimBlock(block_dim, block_dim);
     dim3 dimGrid((n + dimBlock.x - 1) / dimBlock.x, (n + dimBlock.y - 1) / dimBlock.y);
 
     cudaEventRecord(start);
-    matmul_kernel<<<dimGrid, dimBlock>>>(Ad, Bd, Cd, n);
+    matmul_kernel<<<dimGrid, dimBlock, shared_memory>>>(Ad, Bd, Cd, n);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 

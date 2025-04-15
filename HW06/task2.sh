@@ -12,5 +12,5 @@
 n=$((2**$SLURM_ARRAY_TASK_ID))
 echo "./task2 $SLURM_ARRAY_TASK_ID"
 
-nvcc task2.cu stencil.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std c++17 -o task2
-./task1_$SLURM_ARRAY_TASK_ID $n 128 1024
+nvcc task2.cu stencil.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std c++17 -o task2_$SLURM_ARRAY_TASK_ID
+./task2_$SLURM_ARRAY_TASK_ID $n 128 1024

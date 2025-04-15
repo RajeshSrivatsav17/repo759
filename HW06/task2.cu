@@ -1,6 +1,8 @@
 #include<iostream>
 #include<cuda.h>
 #include<cmath>
+#include<ctime>
+#include "stencil.cuh"
 
 float genRandomfloat(float min, float max){
     return (min + (((float)std::rand())/(float)RAND_MAX)*(max-min));
