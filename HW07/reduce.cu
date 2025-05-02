@@ -1,18 +1,23 @@
 #include "reduce.cuh"
 #include <cuda.h>
 #include <stdio.h>
-
+#include <iostream>
 __global__ void reduce_kernel(float *g_idata, float *g_odata, unsigned int n) {
     extern __shared__ float sh_mem[];
     
     // Set up thread and block indices
     int tid = threadIdx.x;
     int idx = blockIdx.x * (blockDim.x * 2) + threadIdx.x;
-    
+
     // Perform first level of reduction upon reading from global memory
     // Each thread loads and processes two elements
-    sh_mem[tid] = (idx < n) ? g_idata[idx] : 0.0f;
-    if (idx + blockDim.x < n) {
+    if(idx <n){
+        sh_mem[tid] = g_idata[idx];
+    } else {
+        sh_mem[tid] = 0.0f;
+    }
+
+    if ((idx + blockDim.x) < n) {
         sh_mem[tid] += g_idata[idx + blockDim.x];
     }
     __syncthreads();
@@ -43,9 +48,12 @@ __host__ void reduce(float **input, float **output, unsigned int N,
         num_blocks = (num_blocks > 0) ? num_blocks : 1;
         
         // Launch kernel with dynamically allocated shared memory
-        size_t shared_mem_size = threads_per_block * sizeof(float);
+        size_t shared_mem_size = threads_per_block * 2 * sizeof(float);
         reduce_kernel<<<num_blocks, threads_per_block, shared_mem_size>>>(current_input, current_output, current_n);
-        
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess)
+            std::cout << "CUDA Error: " << cudaGetErrorString(err) << std::endl;
+            cudaDeviceSynchronize();
         // Update for next iteration
         current_n = num_blocks;
         

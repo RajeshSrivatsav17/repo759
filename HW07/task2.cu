@@ -26,8 +26,8 @@ int main(int argc, char* argv[]) {
 
     int n = std::atoi(argv[1]);
     int threads_per_block = std::atoi(argv[2]);
-    int size = n*n;
-    int num_blocks = (n + threads_per_block * 2 - 1) / (threads_per_block * 2);
+    int size = n;
+    int num_blocks = (size + threads_per_block * 2 - 1) / (threads_per_block * 2);
 
     float* input = new float[size];
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
     cudaMalloc((void**)&input_d, size* sizeof(float));
     cudaMalloc((void**)&output_d, num_blocks* sizeof(float));
 
-    assignRandomNumberToInputArraysInt(input, size);
+    assignRandomNumberToInputArrays(input, size);
     cudaMemcpy(input_d, input, size* sizeof(float), cudaMemcpyHostToDevice); 
 
     cudaEventRecord(start);
@@ -50,8 +50,9 @@ int main(int argc, char* argv[]) {
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
-    cudaMemcpy(&input, d_input, sizeof(float), cudaMemcpyDeviceToHost);
-
+    cudaMemcpy(input, input_d, sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(input_d);
+    cudaFree(output_d);
     float ms;
     cudaEventElapsedTime(&ms, start, stop);
 

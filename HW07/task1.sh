@@ -6,7 +6,7 @@
 #SBATCH -e task1_error_%a.txt
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-task=1
-#SBATCH --array=10-15
+#SBATCH --array=5-14
 
 # Compute n for this specific task
 n=$((2**$SLURM_ARRAY_TASK_ID))

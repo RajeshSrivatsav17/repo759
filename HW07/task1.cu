@@ -50,6 +50,7 @@ int main(int argc, char* argv[]) {
 
     int n = std::atoi(argv[1]);
     int block_dim = std::atoi(argv[2]);
+    int block_dim_per_row_or_col = std::sqrt(block_dim);
     int size = n*n;
 
     int* A1 = new int[size];
@@ -110,43 +111,50 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(Bd3, B3, size* sizeof(double), cudaMemcpyHostToDevice);
 
     cudaEventRecord(start);
-    matmul_1(Ad1, Bd1, Cd1, n, block_dim);
-    cudaMemcpy(C1, Cd1, size* sizeof(float), cudaMemcpyDeviceToHost);
+    matmul_1(Ad1, Bd1, Cd1, n, block_dim_per_row_or_col);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
+    cudaMemcpy(C1, Cd1, size* sizeof(int), cudaMemcpyDeviceToHost);
 
     float ms;
     cudaEventElapsedTime(&ms, start, stop);
 
-    std::cout<< C[0] << "\n" << C[size-1] <<"\n"<<ms << "\n";
+    std::cout<< C1[0] << "\n" << C1[size-1] <<"\n"<<ms << "\n";
 
     cudaEventRecord(start, 0);
     cudaEventRecord(stop, 0);
 
     cudaEventRecord(start);
-    matmul_2(Ad2, Bd2, Cd2, n, block_dim);
+    matmul_2(Ad2, Bd2, Cd2, n, block_dim_per_row_or_col);
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
     cudaMemcpy(C2, Cd2, size* sizeof(float), cudaMemcpyDeviceToHost);
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
 
     cudaEventElapsedTime(&ms, start, stop);
 
-    std::cout<< C[0] << "\n" << C[size-1] <<"\n"<<ms << "\n";
+    std::cout<< C2[0] << "\n" << C2[size-1] <<"\n"<<ms << "\n";
 
     cudaEventRecord(start, 0);
     cudaEventRecord(stop, 0);
 
     cudaEventRecord(start);
-    matmul_3(Ad3, Bd3, Cd3, n, block_dim);
-    cudaMemcpy(C3, Cd3, size* sizeof(float), cudaMemcpyDeviceToHost);
+    matmul_3(Ad3, Bd3, Cd3, n, block_dim_per_row_or_col);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
     cudaEventElapsedTime(&ms, start, stop);
+    cudaMemcpy(C3, Cd3, size* sizeof(double), cudaMemcpyDeviceToHost);
 
-    std::cout<< C[0] << "\n" << C[size-1] <<"\n"<<ms << "\n";
+    std::cout<< C3[0] << "\n" << C3[size-1] <<"\n"<<ms << "\n";
 
     cudaEventRecord(start, 0);
     cudaEventRecord(stop, 0);
+    delete[] A1; delete[] B1; delete[] C1;
+    delete[] A2; delete[] B2; delete[] C2;
+    delete[] A3; delete[] B3; delete[] C3;
+    
+    cudaFree(Ad1); cudaFree(Bd1); cudaFree(Cd1);
+    cudaFree(Ad2); cudaFree(Bd2); cudaFree(Cd2);
+    cudaFree(Ad3); cudaFree(Bd3); cudaFree(Cd3);
 
     return 0;
 }
